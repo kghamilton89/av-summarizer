@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Podcast Summarizer</title>
+    <script>
+        async function authenticate() {
+            let userPassword = prompt("Enter password:");
+
+            if (!userPassword) {
+                alert("Password required.");
+                return;
+            }
+
+            // Send password to the backend for verification
+            let response = await fetch("http://127.0.0.1:5000/auth", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ password: userPassword }),
+            });
+
+            let result = await response.json();
+
+            if (result.success) {
+                document.getElementById("content").style.display = "block";
+            } else {
+                alert("Incorrect password. Access denied.");
+                document.body.innerHTML = "<h2>Access Denied</h2>";
+            }
+        }
+
+        window.onload = authenticate;
+    </script>
+</head>
+<body>
+    <div id="content" style="display: none;">
+        <h1>Welcome to AI Podcast Summarizer</h1>
+        <p>This site is password-protected.</p>
+    </div>
+</body>
+</html>
