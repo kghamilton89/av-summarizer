@@ -6,10 +6,9 @@
     <title>AI Podcast Summarizer</title>
     <script>
         async function authenticate() {
-            let userPassword = prompt("Enter password:");
-
+            let userPassword = document.getElementById("password").value;
             if (!userPassword) {
-                alert("Password required.");
+                alert("Please enter a password.");
                 return;
             }
 
@@ -23,17 +22,21 @@
             let result = await response.json();
 
             if (result.success) {
+                document.getElementById("login-form").style.display = "none";
                 document.getElementById("content").style.display = "block";
             } else {
                 alert("Incorrect password. Access denied.");
-                document.body.innerHTML = "<h2>Access Denied</h2>";
             }
         }
-
-        window.onload = authenticate;
     </script>
 </head>
 <body>
+    <div id="login-form">
+        <h2>Enter Password to Access</h2>
+        <input type="password" id="password" placeholder="Enter Password">
+        <button onclick="authenticate()">Submit</button>
+    </div>
+    
     <div id="content" style="display: none;">
         <h1>Welcome to AI Podcast Summarizer</h1>
         <p>This site is password-protected.</p>
