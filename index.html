@@ -7,12 +7,12 @@
     <script>
         async function authenticate() {
             let userPassword = document.getElementById("password").value;
-            if (!userPassword) {
+            if (!userPassword.trim()) {
                 alert("Please enter a password.");
                 return;
             }
 
-            // Send password to the backend for verification
+            // Send password to the backend for verification only when the user clicks submit
             let response = await fetch("http://127.0.0.1:5000/auth", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -34,7 +34,7 @@
     <div id="login-form">
         <h2>Enter Password to Access</h2>
         <input type="password" id="password" placeholder="Enter Password">
-        <button onclick="authenticate()">Submit</button>
+        <button type="button" onclick="authenticate()">Submit</button>
     </div>
     
     <div id="content" style="display: none;">
