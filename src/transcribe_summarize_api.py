@@ -1,18 +1,34 @@
 from flask import Flask, request, jsonify
 from openai import OpenAI
 import os
+import hashlib
 
 app = Flask(__name__)
 
 # Load OpenAI API key from environment variables
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-# Check if API key is loaded correctly
 if not OPENAI_API_KEY:
     raise ValueError("Error: OPENAI_API_KEY is not set!")
 
 # Initialize OpenAI client
 client = OpenAI(api_key=OPENAI_API_KEY)
+
+# Set the hashed password (use SHA-256)
+STORED_PASSWORD_HASH = hashlib.sha256("Portolavalley2025!".encode()).hexdigest()
+
+@app.route("/auth", methods=["POST"])
+def authenticate():
+    data = request.get_json()
+    if not data or "password" not in data:
+        return jsonify({"error": "No password provided"}), 400
+
+    # Hash the input password and compare it with the stored hash
+    input_password_hash = hashlib.sha256(data["password"].encode()).hexdigest()
+    
+    if input_password_hash == STORED_PASSWORD_HASH:
+        return jsonify({"success": True})
+    else:
+        return jsonify({"success": False, "error": "Incorrect password"}), 403
 
 # Transcribe function using Whisper API
 def transcribe_audio(file_path):
@@ -29,7 +45,7 @@ def summarize_text(text):
         model="gpt-4",
         messages=[
             {"role": "system", "content": "You are a podcast summarization assistant."},
-            {"role": "user", "content": f"Summarize this podcast transcript as concisely and clearly as possible: {text}"}
+            {"role": "user", "content": f"Summarize this podcast transcript: {text}"}
         ]
     )
     return response.choices[0].message.content
