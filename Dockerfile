@@ -5,13 +5,13 @@ FROM python:3.10
 WORKDIR /app
 
 # Copy only requirements first for better caching
-COPY src/requirements.txt /app/requirements.txt
+COPY requirements.txt /app/requirements.txt
 
 # Install dependencies
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
 # Copy the rest of the application files
-COPY src/ /app/
+COPY . /app/
 
 # Expose the Flask app's port
 EXPOSE 5000
