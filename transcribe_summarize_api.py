@@ -14,7 +14,7 @@ if not OPENAI_API_KEY:
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 # Set the hashed password (use SHA-256)
-STORED_PASSWORD_HASH = hashlib.sha256("Portolavalley2025!".encode()).hexdigest()
+STORED_PASSWORD_HASH = hashlib.sha256("mYsTr0nGpA$$w0Rd!".encode()).hexdigest()
 
 @app.route("/auth", methods=["POST"])
 def authenticate():
